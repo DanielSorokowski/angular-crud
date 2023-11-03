@@ -1,0 +1,65 @@
+
+
+<form [formGroup]="myForm" (ngSubmit)="onSubmit()" class="form">
+  <h2>Add User</h2>
+  <label class="form__label">
+    <span class="form__label-name">Name</span>
+    <input 
+      type="text" 
+      formControlName="name" 
+      class="form__input"
+    >
+  </label>
+  <label class="form__label">
+    <span class="form__label-name">Surname</span>
+    <input 
+      type="text" 
+      formControlName="surname" 
+      class="form__input"
+    >
+  </label>
+  <label class="form__label">
+    <span class="form__label-name">Email</span>
+    <input 
+      type="email" 
+      formControlName="email" 
+      class="form__input"
+    >
+  </label>
+  <label class="form__label">
+    <span class="form__label-name">Age</span>
+    <input 
+      type="number" 
+      formControlName="age" 
+      class="form__input"
+    >
+  </label>
+  <div *ngIf="myForm.get('age')?.hasError('userTooYoung') && myForm.get('age')?.touched" class="form__error">
+    User must be over 18 years old.
+  </div>
+  <div *ngIf="myForm.get('age')?.hasError('userTooOld') && myForm.get('age')?.touched" class="form__error">
+    User cant be older then 99 years old
+  </div>
+  <label class="form__label form__label--checkbox">
+    <input 
+      type="checkbox" 
+      formControlName="premium" 
+      class="form__input"
+    >
+    <span class="form__label-name">Premium</span>
+  </label>
+
+  <button type="submit" class="form__submit">Submit</button>
+
+  <div *ngIf="myForm.hasError('userExists') && myForm.touched" class="form__error">
+    User with this name and surname already exists.
+  </div>  
+
+  <div *ngIf="myForm.hasError('userCantBePremium') && myForm.touched" class="form__error">
+    Only user Older than 35 can be users premium
+  </div>  
+</form>
+
+
+
+

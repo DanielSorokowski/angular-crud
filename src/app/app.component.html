@@ -1,0 +1,4 @@
+<main class="main"> 
+  <app-form [users]="users$ | async" (userUpdated)="updateUser()"></app-form>
+  <app-users-table [users]="users$ | async" (userUpdated)="updateUser()"></app-users-table>
+</main>
