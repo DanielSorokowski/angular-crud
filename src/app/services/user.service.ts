@@ -7,17 +7,16 @@ import { User } from '../interfaces/user';
   providedIn: 'root'
 })
 export class UserService {
-  private url = 'https://crudcrud.com/api/c8b251e7ebe446c9a5af384b390e919f/users';
+  private url = 'https://crudcrud.com/api/9a693ec099804643893103786cce885d/users';
   usersChanged$ = new Subject<void>()
   constructor(private http: HttpClient) {}
 
   loadAllUsers(): Observable<User[]> {
-    return this.http.get<User[]>(this.url).pipe(shareReplay());
+    return this.http.get<User[]>(this.url)
   }
 
   saveUser(userId: string, changes: Partial<User>): Observable<any> {
     return this.http.put(`${this.url}/${userId}`, changes).pipe(
-      shareReplay(),
       tap(() => this.usersChanged$.next())
     );
   }

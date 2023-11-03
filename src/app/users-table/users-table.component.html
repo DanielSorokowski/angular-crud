@@ -1,57 +1,3 @@
-<!-- <div class="users-table">
-  <div *ngIf="editForm.get('email')?.invalid && (editForm.get('email')?.dirty || editForm.get('email')?.touched)" class="users-table__error">
-    Invalid email
-  </div>
-  <div *ngIf="editForm.get('age')?.hasError('userTooYoung') && editForm.get('age')?.touched" class="form__error">
-    User must be over 18 years old.
-  </div>
-  <div *ngIf="editForm.get('age')?.hasError('userTooOld') && editForm.get('age')?.touched" class="form__error">
-    User cant be older then 99 years old
-  </div>
-  <div *ngIf="editForm.hasError('userExists') && editForm.touched" class="form__error">
-    User with this name and surname already exists.
-  </div>  
-  <div *ngIf="editForm.hasError('userCantBePremium') && editForm.touched" class="form__error">
-    Only user Older than 35 can be users premium
-  </div>  
-
-  <table>
-    <tr>
-      <th>Name</th>
-      <th>Surname</th>
-      <th>Email</th>
-      <th>Age</th>
-      <th>Premium</th>
-      <th>DELETE</th>
-    </tr>
-    <tr [formGroup]="editForm" *ngFor="let user of users">
-      <td (dblclick)="startEditing(user)">
-        <span *ngIf="!user.editing">{{ user.name }}</span>
-        <input *ngIf="user.editing" type="text"(blur)="finishEditing(user)" formControlName="name" >
-      </td>
-      <td (dblclick)="startEditing(user)">
-        <span *ngIf="!user.editing">{{ user.surname }}</span>
-        <input *ngIf="user.editing" type="text" (blur)="finishEditing(user)" formControlName="surname" >
-      </td>
-      <td (dblclick)="startEditing(user)">
-        <span *ngIf="!user.editing">{{ user.email }}</span>
-        <input *ngIf="user.editing" type="email" (blur)="finishEditing(user)" formControlName="email" >
-      </td>
-      <td (dblclick)="startEditing(user)">
-        <span *ngIf="!user.editing">{{ user.age }}</span>
-        <input *ngIf="user.editing" type="text" (blur)="finishEditing(user)" formControlName="age" >
-      </td>
-      <td (dblclick)="startEditing(user)">
-        <span *ngIf="!user.editing">{{ user.premium }}</span>
-        <input *ngIf="user.editing" type="checkbox" (blur)="finishEditing(user)" formControlName="premium" >
-      </td>
-      <td>
-        <button (click)="deleteUser(user._id!)">DELETE</button>
-      </td>
-    </tr>
-  </table>
-</div> -->
-
 
 <div class="users-table">
   <div *ngIf="editForm.get('email')?.invalid && (editForm.get('email')?.dirty || editForm.get('email')?.touched)" class="users-table__error">
@@ -72,22 +18,22 @@
 
   <div>
     <div class="users-table__header">
-      <div *ngFor="let header of headers">{{ header }}</div>
+      <div *ngFor="let header of headers">
+        {{ header }}
+        <button (click)="sortUsers(header)">🔻</button>
+      </div>
       <div>DELETE</div>
     </div>
-    <form *ngFor="let user of users" class="users-table__content">
+    <form [formGroup]="editForm" *ngFor="let user of users" class="users-table__content">
       <ng-container *ngFor="let prop of properties">
         <div (dblclick)="startEditing(user)">
           <span *ngIf="!user.editing">{{ user[prop.key] }}</span>
-          <input *ngIf="user.editing" [type]="prop.type" (blur)="finishEditing(user)" [formControl]="getControl(prop.key)">
+          <input *ngIf="user.editing && prop.type === 'text'" type="text" (blur)="finishEditing(user)" [formControlName]="prop.key">
+          <input *ngIf="user.editing && prop.type === 'checkbox'" type="checkbox" (blur)="finishEditing(user)" [formControlName]="prop.key">
         </div>
       </ng-container>
-      <!-- <div (dblclick)="startEditing(user)">
-        <span *ngIf="!user.editing">{{ user.premium }}</span>
-        <input *ngIf="user.editing" type="checkbox" (blur)="finishEditing(user)" formControlName="premium" >
-      </div> -->
       <div>
-        <button (click)="deleteUser(user._id!)">DELETE</button>
+        <button type="button" (click)="deleteUser(user._id!)">DELETE</button>
       </div>
     </form>
   </div>

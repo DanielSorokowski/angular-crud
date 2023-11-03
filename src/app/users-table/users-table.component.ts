@@ -10,13 +10,13 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from
   styleUrls: ['./users-table.component.scss']
 })
 export class UsersTableComponent {
-  headers = ['Name', 'Surname', 'Email', 'Age', 'Premium'];
+  headers = ['name', 'surname', 'email', 'age', 'premium'];
   properties = [
     { key: 'name', type: 'text' },
     { key: 'surname', type: 'text' },
-    { key: 'email', type: 'email' },
+    { key: 'email', type: 'text' },
     { key: 'age', type: 'text' },
-    { key: 'premium', type: 'checkbox' }
+    { key: 'premium', type: 'checkbox' },
   ];
 
   @Input()
@@ -47,14 +47,13 @@ export class UsersTableComponent {
       ],
       age: [
         '', 
-        [Validators.required]
+        [Validators.required, this.isTooYoung(), this.isTooOld()]
       ],
       premium: [
-        true, 
+        false, 
         [Validators.required]
       ],
-    });
-    this.editForm.valueChanges.subscribe(console.log)
+    }, { validators: [this.doesUserExist(), this.canBePremium()] });
   }
 
   ngOnDestroy() {
@@ -69,7 +68,7 @@ export class UsersTableComponent {
 
   startEditing(user: any): void {
     user.editing = true;
-    // this.editForm.patchValue(user)
+    this.editForm.patchValue(user)
   }
 
   finishEditing(user: User): void {
@@ -126,7 +125,13 @@ export class UsersTableComponent {
     };
   }
 
-  getControl(name: string) {
-    return this.editForm.get(name) as FormControl
+  sortUsers(by: string) {
+    this.users!.sort((a, b) => {
+      if (typeof a[by] === 'string' && typeof b[by] === 'string') {
+        return a[by].localeCompare(b[by])
+      }
+
+      return a[by] - b[by]
+    })
   }
 }
